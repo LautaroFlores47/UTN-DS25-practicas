@@ -162,8 +162,7 @@ function ejercicio15() {
     if (isNaN(altura) || altura <= 0) {
         mostrarResultado("Ingresá una altura válida (número mayor a 0).");
     } else {
-        const arbol = medioArbol(altura);
-        mostrarResultado(arbol);
+        ejercicio12(altura);
     }
 }
 
