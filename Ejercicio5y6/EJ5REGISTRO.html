@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Librería</title>
+    <link rel="stylesheet" href="EJ5estilos.css">
+</head>
+<body>
+    <div id="contenedor">
+        <div id="cabecera">
+            <img src="pngtree-books-logo-image_80041.jpg" alt="Logo Librería" id="logo">
+            <h1>Registrarse</h1>
+        </div>
+
+        <div id="menu">
+            <ul>
+                <li><a href="EJ5.html">Inicio</a></li>
+                <li><a href="EJ5FANTASIA.html">Fantasía</a></li>
+                <li><a href="EJ5CF.html">Ciencia Ficción</a></li>
+                <li><a href="EJ5TERROR.html">Terror</a></li>
+                <li><a href="EJ5INFANTIL.html">Infantil</a></li>
+                <li><a href="EJ5REGISTRO.html">Registrarse</a></li>
+                <li><a href="EJ5CONTACTO.html">Contacto</a></li>
+            </ul>
+        </div>
+
+        <div id="contenido">
+            <form>
+                <label for="nombre">Nombre:</label><br>
+                <input type="text" id="nombre" name="nombre" required><br><br>
+                
+                <label for="apellido">Apellido:</label><br>
+                <input type="text" id="apellido" name="apellido" required><br><br>
+
+                <label for="fechanac">Fecha de Nacimiento:</label><br>
+                <input type="date" id="fechanac" name="fechanac" required><br><br>
+
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required><br><br>
+
+                <label for="contraseña">Contraseña:</label><br>
+                <input type="password" id="contraseña" name="contraseña" required><br><br>
+
+                <label>Sexo:</label><br>
+                <input type="radio" id="hombre" name="sexo" value="hombre">
+                <label for="hombre">Hombre</label><br>
+                <input type="radio" id="mujer" name="sexo" value="mujer">
+                <label for="mujer">Mujer</label><br><br>
+            
+
+                <label for="temafav">Tema Favorito:</label><br>
+                <select id="temafav" name="temafav" multiple>
+                    <option value="01">Fantasía</option>
+                    <option value="02">Ciencia Ficción</option>
+                    <option value="03">Terror</option>
+                    <option value="04">Infantil</option>
+            </select><br><br>
+
+                <input id="boton" type="submit" value="Registrarse">
+            </form>
+        </div>
+
+        <div id="pie">
+            <p>&copy; 2025 Librería</p>
+        </div>
+    </div>
+</body>
+</html>

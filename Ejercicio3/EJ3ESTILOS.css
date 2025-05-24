@@ -1,0 +1,29 @@
+table {
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid black;
+    padding: 20px 60px;
+    background-color: lightblue;
+}
+
+.fila2 td {
+    background-color: lightgreen; 
+}
+
+.columna3 {
+    background-color: pink; 
+}
+
+#especial2 {
+    background-color: yellow; 
+}
+
+#especial3 {
+    background-color: green;
+}
+
+#especial1 {
+    background-color: orange;
+}
