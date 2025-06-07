@@ -1,0 +1,141 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#contenedor {
+    width: 100%;
+    margin: auto;
+    background-color: #f8f8f8;
+}
+
+#cabecera {
+    height: 120px;
+    background-size: cover;
+    padding: 20px;
+    position: relative;
+    background-image: url(/pngtree-hand-drawn-vintage-book-sketch-background-picture-image_1302079.jpg);
+}
+
+#logo {
+    height: 80px;
+    float: left;
+    margin-right: 15px;
+    border: 2px solid #ccc;
+}
+
+
+#cabecera h1 {
+    margin: 30px 0 0 0;
+}
+
+/* MENÚ */
+#menu {
+    float: left;
+    width: 20%;
+    background-color: #333;
+    min-height: 100%;
+}
+
+#menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#menu li a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+}
+
+#menu li a:hover {
+    background-color: #555;
+}
+
+#contenido {
+    float: left;
+    width: 80%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.tema {
+    float: left;
+    width: 45%;
+    margin: 2.5%;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    text-align: center;
+    min-height: 320px;
+}
+
+.tema img {
+    width: 120px;
+    height: 180px;
+    margin-bottom: 10px;
+    object-fit: cover;
+}
+
+#pie {
+    clear: both;
+    background-color: #222;
+    color: white;
+    text-align: end;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+/* Formulario de registro */
+
+form {
+    width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f2f2f2;
+    border-radius: 10px;
+}
+
+form label {
+    font-weight: bold;
+}
+
+form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+form input#boton {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+form input#boton:hover {
+    background-color: #45a049;
+}
+
+ul.contacto {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 10px;
+    background-color: #e8e8e8;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+ul.contacto li {
+    margin-bottom: 8px;
+    font-size: 16px;
+}
