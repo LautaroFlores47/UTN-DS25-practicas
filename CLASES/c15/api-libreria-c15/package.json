@@ -1,0 +1,23 @@
+{
+  "name": "api-libreria-c15",
+  "version": "1.0.0",
+  "main": "index.js",
+  "description": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.3.3",
+    "typescript": "^5.9.2"
+  }
+}
+
+
