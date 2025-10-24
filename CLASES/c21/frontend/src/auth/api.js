@@ -1,11 +1,14 @@
+// src/auth/api.js
+const BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
 export function getToken() {
-    return localStorage.getItem('token') || '';
-    }
-    export function setToken(token) {
+  return localStorage.getItem('token') || '';
+}
+export function setToken(token) {
     if (token) localStorage.setItem('token', token);
     else localStorage.removeItem('token');
-    }
-    export function getUser() {
+}
+export function getUser() {
     try { return JSON.parse(localStorage.getItem('user') || 'null'); }
     catch { return null; }
     }
@@ -14,25 +17,32 @@ export function getToken() {
     else localStorage.removeItem('user');
     }
 
+    function apiUrl(path) {
+    const p = path.startsWith('/') ? path : `/${path}`;
+    return `${BASE}${p}`;
+    }
+
     export async function login(email, password) {
-    const res = await fetch('/api/auth/login', {
-        method: 'POST', headers: { 'Content-Type':'application/json' },
+    const res = await fetch(apiUrl('/api/auth/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
     });
-    const json = await res.json().catch(()=> ({}));
+    const json = await res.json().catch(() => ({}));
     if (!res.ok || !json?.success) throw new Error(json?.message || 'Credenciales inválidas');
 
     setToken(json.data.token);
     setUser(json.data.user);
     return json.data.user;
-}
+    }
 
-export async function register(name, email, password) {
-    const res = await fetch('/api/auth/register', {
-        method: 'POST', headers: { 'Content-Type':'application/json' },
+    export async function register({ name, email, password }) {
+    const res = await fetch(apiUrl('/api/auth/register'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
     });
-    const json = await res.json().catch(()=> ({}));
+    const json = await res.json().catch(() => ({}));
     if (!res.ok || !json?.success) throw new Error(json?.message || 'No se pudo registrar');
 
     setToken(json.data.token);
@@ -40,12 +50,14 @@ export async function register(name, email, password) {
     return json.data.user;
 }
 
-export async function authFetch(url, options = {}) {
+export async function authFetch(pathOrUrl, options = {}) {
     const token = getToken();
     const headers = {
         ...(options.headers || {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {})
     };
+
+    const url = /^https?:\/\//i.test(pathOrUrl) ? pathOrUrl : apiUrl(pathOrUrl);
     return fetch(url, { ...options, headers });
 }
 
