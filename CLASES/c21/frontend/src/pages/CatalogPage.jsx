@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Tema from "../components/Tema";
+import { authFetch } from "../auth/api"; 
 
 export default function CatalogPage() {
     const [librosApi, setLibrosApi] = useState([]);
@@ -12,33 +13,48 @@ export default function CatalogPage() {
 
     useEffect(() => {
         let cancelado = false;
-        (async () => {
+
+        async function cargar() {
         try {
             setCargando(true);
             setError("");
 
-            const url = cat
+            const path = cat
             ? `/api/books?category=${encodeURIComponent(cat)}`
             : `/api/books`;
 
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`Error HTTP: ${res.status}`);
-            const json = await res.json();
+            const res = await authFetch(path, { method: "GET" });
+            const text = await res.text();
+
+            let json;
+            try {
+            json = JSON.parse(text);
+            } catch {
+            const snippet = text.slice(0, 200).replace(/\s+/g, " ");
+            throw new Error(`Respuesta no-JSON (status ${res.status}). Snippet: ${snippet}`);
+            }
+
+            if (!res.ok || json?.success === false) {
+            throw new Error(json?.message || `Error HTTP ${res.status}`);
+            }
 
             const arr = Array.isArray(json?.data) ? json.data : [];
-
             if (!cancelado) setLibrosApi(arr);
+
+            // subir al inicio
             window.scrollTo({ top: 0, behavior: "smooth" });
         } catch (e) {
             if (!cancelado) setError(e.message || "Error desconocido");
         } finally {
             if (!cancelado) setCargando(false);
         }
-        })();
+        }
+
+        cargar();
         return () => {
         cancelado = true;
         };
-    }, [cat]); 
+    }, [cat]);
 
     if (cargando) return <p style={{ margin: "8px 0" }}>Cargando catálogo…</p>;
     if (error) return <p style={{ margin: "8px 0", color: "crimson" }}>Error cargando catálogo: {error}</p>;
@@ -47,30 +63,29 @@ export default function CatalogPage() {
         const categoryNames =
         b.categoryNames ?? (Array.isArray(b.categories) ? b.categories.map((c) => c.name) : []);
         const categoriaPrincipal = categoryNames[0] || "General";
-        const autorNombre = b.author?.name ?? "Autor desconocido";
+        const autorNombre = b.author?.name ?? b.author ?? "Autor desconocido";
         const imagen = b.imageUrl || "/placeholder-libro.jpg";
 
         return {
         id: b.id,
         titulo: b.title ?? "",
         imagen,
-        descripcion: `${autorNombre} · $${b.price}`,
-        categorias: categoryNames,     // array para filtrar en cliente
-        categoria: categoriaPrincipal, // compat con UI
+        descripcion: `${autorNombre} · $${b.price ?? ""}`,
+        categorias: categoryNames,
+        categoria: categoriaPrincipal,
         stock: b.stock ?? 0,
         enlace: "#",
         };
     });
 
     const q = busqueda.trim().toLowerCase();
-    const filtrados = adaptados.filter((l) => {
-        const okTitulo = !q || l.titulo.toLowerCase().includes(q);
-        return okTitulo;
-    });
+    const filtrados = adaptados.filter((l) => !q || l.titulo.toLowerCase().includes(q));
 
     return (
         <>
-        <h2 style={{ margin: "0 0 12px" }}>Catálogo {cat ? `· ${cat}` : ""}</h2>
+        <h2 style={{ margin: "0 0 12px" }}>
+            Catálogo {cat ? `· ${cat}` : ""}
+        </h2>
 
         <input
             type="text"

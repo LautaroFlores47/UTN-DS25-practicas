@@ -1,50 +1,57 @@
 // src/auth/api.js
-const BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const BASE = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 export function getToken() {
-  return localStorage.getItem('token') || '';
+    return localStorage.getItem("token") || "";
 }
 export function setToken(token) {
-    if (token) localStorage.setItem('token', token);
-    else localStorage.removeItem('token');
+    if (token) localStorage.setItem("token", token);
+    else localStorage.removeItem("token");
 }
 export function getUser() {
-    try { return JSON.parse(localStorage.getItem('user') || 'null'); }
+    try { return JSON.parse(localStorage.getItem("user") || "null"); }
     catch { return null; }
     }
     export function setUser(user) {
-    if (user) localStorage.setItem('user', JSON.stringify(user));
-    else localStorage.removeItem('user');
-    }
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
+}
 
-    function apiUrl(path) {
-    const p = path.startsWith('/') ? path : `/${path}`;
+function apiUrl(path) {
+    const p = path.startsWith("/") ? path : `/${path}`;
     return `${BASE}${p}`;
+}
+
+async function safeJson(res) {
+    const text = await res.text();
+    try { return JSON.parse(text); }
+    catch {
+        const snippet = text.slice(0, 200).replace(/\s+/g, " ");
+        throw new Error(`Respuesta no-JSON (status ${res.status}). Snippet: ${snippet}`);
     }
+}
 
-    export async function login(email, password) {
-    const res = await fetch(apiUrl('/api/auth/login'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+export async function login(email, password) {
+    const res = await fetch(apiUrl("/api/auth/login"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
     });
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok || !json?.success) throw new Error(json?.message || 'Credenciales inválidas');
-
+    const json = await safeJson(res);
+    if (!res.ok || !json?.success) throw new Error(json?.message || "Credenciales inválidas");
     setToken(json.data.token);
     setUser(json.data.user);
     return json.data.user;
-    }
+}
 
-    export async function register({ name, email, password }) {
-    const res = await fetch(apiUrl('/api/auth/register'), {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+export async function register({ name, email, password }) {
+    const res = await fetch(apiUrl("/api/auth/register"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
     });
-    const json = await res.json().catch(() => ({}));
-    if (!res.ok || !json?.success) throw new Error(json?.message || 'No se pudo registrar');
-
+    const json = await safeJson(res);
+    if (!res.ok || !json?.success) throw new Error(json?.message || "No se pudo registrar");
     setToken(json.data.token);
     setUser(json.data.user);
     return json.data.user;
@@ -54,15 +61,14 @@ export async function authFetch(pathOrUrl, options = {}) {
     const token = getToken();
     const headers = {
         ...(options.headers || {}),
-        ...(token ? { Authorization: `Bearer ${token}` } : {})
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
-
     const url = /^https?:\/\//i.test(pathOrUrl) ? pathOrUrl : apiUrl(pathOrUrl);
     return fetch(url, { ...options, headers });
 }
 
 export function logout() {
-    setToken('');
+    setToken("");
     setUser(null);
-    window.location.href = '/';
+    window.location.href = "/login";
 }
